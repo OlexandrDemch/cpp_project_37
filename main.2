@@ -1,0 +1,62 @@
+#include <iostream>
+
+class Complex {
+private:
+    double real;
+    double imag;
+
+public:
+    Complex(double r = 0.0, double i = 0.0) : real(r), imag(i) {}
+
+    Complex operator+(const Complex& other) const {
+        return Complex(real + other.real, imag + other.imag);
+    }
+
+    Complex operator-(const Complex& other) const {
+        return Complex(real - other.real, imag - other.imag);
+    }
+
+    Complex operator*(const Complex& other) const {
+        return Complex((real * other.real) - (imag * other.imag), (real * other.imag) + (imag * other.real));
+    }
+
+    Complex operator/(const Complex& other) const {
+        double denominator = other.real * other.real + other.imag * other.imag;
+        if (denominator != 0) {
+            return Complex((real * other.real + imag * other.imag) / denominator,
+                (imag * other.real - real * other.imag) / denominator);
+        }
+        else {
+            std::cerr << "Error: Division by zero." << std::endl;
+            return Complex();
+        }
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Complex& complex) {
+        os << complex.real;
+        if (complex.imag >= 0) {
+            os << " + " << complex.imag << "i";
+        }
+        else {
+            os << " - " << -complex.imag << "i";
+        }
+        return os;
+    }
+};
+
+int main() {
+    Complex c1(2.0, 3.0);
+    Complex c2(1.0, 4.0);
+
+    Complex sum = c1 + c2;
+    Complex diff = c1 - c2;
+    Complex product = c1 * c2;
+    Complex quotient = c1 / c2;
+
+    std::cout << "Sum: " << sum << std::endl;
+    std::cout << "Difference: " << diff << std::endl;
+    std::cout << "Product: " << product << std::endl;
+    std::cout << "Quotient: " << quotient << std::endl;
+
+    return 0;
+}
